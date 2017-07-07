@@ -16,7 +16,7 @@ The swap device is a block device in a configurable section of a disk. The space
 
 The allocation scheme for swap space allocation differs from the scheme used for file systems. Therefore, the data structures also differ. The kernel maintains the free space for the swap device in an in-core table, called *map*. A map is an array where each entry consists of an address of an allocatable resource and the number of resource units available there; the kernel interprets the address and units according to the type of map. Initially, a map contains one entry that indicates the address and the total number of resources; it is shown in the figure:
 
-![Initial swap map](Diagrams/Screen Shot 2017-06-26 at 4.36.45 PM.png)
+![Initial swap map](Diagrams/Screen_Shot_2017-06-26_at_4.36.45_PM.png)
 
 This is to be interpreted as: there are 10000 free blocks starting from address 1.
 
@@ -48,7 +48,7 @@ The algorithm to allocate map space, *malloc* is given below:
 
 The following figures show the state of the map after allocating 100 units, 50 units, then 100 units again:
 
-![Allocating swap space](Diagrams/Screen Shot 2017-06-26 at 4.44.14 PM.png)
+![Allocating swap space](Diagrams/Screen_Shot_2017-06-26_at_4.44.14_PM.png)
 
 When freeing resources, the kernel finds their proper position in the map by address. Three cases are possible here:
 
@@ -58,7 +58,7 @@ When freeing resources, the kernel finds their proper position in the map by add
 
 Considering the previous example, if the kernel frees 50 units of swap space starting at address 101, the swap map will contain a new entry (case 3). If the kernel then frees 100 units starting at address 1, it adjusts the first entry of the swap map (case 2). Suppose the kernel now requests 200 units of swap space, since the first entry cannot satisfy the requirement, the second entry is modified and space is given from address 251 to 450, both inclusive. These actions are shown below:
 
-![Swap map](Diagrams/Screen Shot 2017-06-26 at 4.54.03 PM.png)
+![Swap map](Diagrams/Screen_Shot_2017-06-26_at_4.54.03_PM.png)
 
 Now if the 300 units are freed from address 151 are freed, it will completely, fill the hole between entry number 1 and 2 (case 1), and the entries will be merged together, resulting into only one entry in the map.
 
@@ -81,13 +81,13 @@ It is not necessary that the kernel write the entire virtual address space of a 
 
 The following figure is an example of mapping the in-core image of a process onto a swap device:
 
-![Mapping process space onto the swap device](Diagrams/Screen Shot 2017-06-26 at 5.20.14 PM.png)
+![Mapping process space onto the swap device](Diagrams/Screen_Shot_2017-06-26_at_5.20.14_PM.png)
 
 Note: for simplicity, the virtual address space is depicted as a linear array of page table entries, disregarding the fact that each region usually has a separate page table.
 
 When swapping out, the kernel does not allocate space for empty entries in the page tables. The following figure depicts the scenario when the process in swapped back in. The physical addresses it gets are different. However, no change is noticed on the user-level.
 
-![Swap in](Diagrams/Screen Shot 2017-06-26 at 12.36.32 PM.png)
+![Swap in](Diagrams/Screen_Shot_2017-06-26_at_12.36.32_PM.png)
 
 The kernel does not swap out the u-are of a process if it contains the address translation tables for the process (implementation dependent). The implementations dictate whether a process can swap itself out or whether it must request another process to swap it out.
 
@@ -99,7 +99,7 @@ If enough memory is not available in *fork*, the kernel swaps the process out wi
 
 A process needs to be swapped as a result of its user stack growth or invocation of the *brk* system call, if enough memory is not available. In such situation, the kernel reserves enough space on the swap device, including the newly requested space. Then, it adjusts the address translation mapping of the process to account for the new virtual memory but does not assign physical memory (since none was available). Finally, it swaps the process out in a normal swapping operation, zeroing out the newly allocated space on the swap device. When the kernel later swaps the process into memory, it will allocate physical memory according to the new address translation map. It is shown in the figure below:
 
-![Expansion swap](Diagrams/Screen Shot 2017-06-26 at 5.46.00 PM.png)
+![Expansion swap](Diagrams/Screen_Shot_2017-06-26_at_5.46.00_PM.png)
 
 **Swapping Processes In**
 
@@ -148,7 +148,7 @@ If the swapper cannot find a processes to swap out or if neither the process to 
 
 Here is an example of process scheduling in a system where A, B, C, D are same sized processes and only 2 processes can stay in main memory. This is the scheduling timeline:
 
-![Sequence of swapping operations](Diagrams/Screen Shot 2017-06-27 at 4.46.15 PM.png)
+![Sequence of swapping operations](Diagrams/Screen_Shot_2017-06-27_at_4.46.15_PM.png)
 
 The swapper chooses processes to swap in based on the amount of time the processes had been swapped out. Another criterion could have been to swap in the highest-priority process that is ready to run, since such processes deserve a better chance to execute. It has been demonstrated that such a policy results in "slightly" better throughput under heavy system load.
 
@@ -158,7 +158,7 @@ The algorithm for choosing a process to swap out has some serious flaws:
 2. If the swapper sleeps because it could not find enough memory to swap in a process, it searches again for a process to swap in although it had previously chosen one. The reason is that other swapped processes may have awakened in the meantime and they may be more eligible for swapping in than the previously chosen process. But that is small solace to the original process still trying to be swapped in. In some implementations, the swapper  tries to swap out many smaller processes to make room for the big process to be swapped in before searching for another process to swap in; this is the revision in the swapper algorithm shown by the comments in the algorithm given above.
 3. If the swapper chooses a "ready-to-run" process to swap out, it is possible that the process had not executed since it was previously swapped in. The following figure shows such a case, where the kernel swaps in process D at the 2-second mark, schedules process C, and then swaps out process D at the 3-second mark in favor of process E (because of the interaction of the *nice* value) even though process D had never run. Such thrashing is clearly undesirable:
 
-![Thrashing due to swapping](Diagrams/Screen Shot 2017-06-27 at 5.15.43 PM.png)
+![Thrashing due to swapping](Diagrams/Screen_Shot_2017-06-27_at_5.15.43_PM.png)
 
 4. If the swapper attempts to swap out a process but cannot find space on the swap device, a system deadlock could arise if the following four conditions are met:
 	
@@ -175,7 +175,7 @@ The portion of the text section which contains the frequently called subroutines
 
 The following figure shows the changes in working set of different window sizes as the process accesses pages:
 
-![Working set](Diagrams/Screen Shot 2017-06-27 at 5.53.39 PM.png)
+![Working set](Diagrams/Screen_Shot_2017-06-27_at_5.53.39_PM.png)
 
 As shown in the diagram, working sets with larger window sizes are more efficient, implying that the process will not fault often as often. 
 
@@ -206,7 +206,7 @@ The kernel sets the *valid* bit to indicate that the contents of a page are lega
 
 The structure of the region is given below:
 
-![Page table entries and disk block descriptors](Diagrams/Screen Shot 2017-06-27 at 6.13.39 PM.png)
+![Page table entries and disk block descriptors](Diagrams/Screen_Shot_2017-06-27_at_6.13.39_PM.png)
 
 Each page table entry is associated with a disk block descriptor, which describes the disk copy of the virtual page. Processes that share a region therefore access common page table entries and disk block descriptors. The contents of a virtual pages are either in a particular block on a swap device, in an executable, or not on a swap device. If the page is on a swap device, the disk block descriptor contains the logical device number and block number containing the page contents. If the page is contained in an executable file, the disk block descriptor contains the logical block number in the file that contains the page; the kernel can quickly map this number into its disk address. The disk block descriptor also indicates two special conditions set during *exec*: that a page is "demand fill" or "demand zero", studied later.
 
@@ -223,7 +223,7 @@ The swap-use table contains an entry for every page on a swap device. The entry 
 
 The following figure shows the relationship between page table entries, disk block descriptors, pfdata table entries, and the swap-use count table.
 
-![Relationship of data structures for demand paging](Diagrams/Screen Shot 2017-06-27 at 10.38.00 PM.png)
+![Relationship of data structures for demand paging](Diagrams/Screen_Shot_2017-06-27_at_10.38.00_PM.png)
 
 It will be explained later why the block number is duplicated in disk block descriptor and pfdata entry table.
 
@@ -235,7 +235,7 @@ The kernel sets the "copy-on-write" bit in *fork*, for the shared pages in the p
 
 The diagram below shows the kernel data structures after the *fork* system call:
 
-![Pages when a process forks](Diagrams/Screen Shot 2017-06-28 at 9.28.39 AM.png)
+![Pages when a process forks](Diagrams/Screen_Shot_2017-06-28_at_9.28.39_AM.png)
 
 Text region is shared, the page frame reference count remains 1. And pages in private regions are shared, the page frame reference count is 2.
 
@@ -254,7 +254,7 @@ There are some inefficiencies in this scheme:
 
 To page directly from an executable file, the kernel finds all the disk block numbers of the executable file when it does the *exec* and attaches the list to the file indoe. When setting up the page table for such an executable file, the kernel marks the disk block descriptor with the logical block number (starting from block 0 in the file) containing the page; the validity fault handler later uses this information to load the page from the file. The following figure shows a typical arrangement, where the disk block descriptor indicates that the page is at logical block offset 84 in the file. The kernel follows the pointer from the region to the inode and looks up the appropriate disk block number.
 
-![Mapping a file into a region](Diagrams/Screen Shot 2017-06-28 at 10.05.08 AM.png)
+![Mapping a file into a region](Diagrams/Screen_Shot_2017-06-28_at_10.05.08_AM.png)
 
 ### The Page-Stealer Process
 
@@ -262,9 +262,9 @@ The page stealer is a kernel process that swaps out memory pages that are no lon
 
 There are two paging states for a page in memory: the page is aging and is not yet eligible for swapping, or the page is eligible fro swapping and is available for reassignment to other virtual pages. The first state indicates that a process recently accessed the page. Some machines set a *reference* bit when they reference a page, but software methods can be substituted if the hardware does not have this feature. The page stealer turns off the *reference* bit for such pages but remembers how many examinations have passed since the page was last referenced. Te first state thus consists of several substates, corresponding to the number of passes the page stealer makes before the page is eligible for swapping. When the number exceeds a threshold value, the kernel puts the page into the second state, ready to be swapped. The figures show how a page ages:
 
-![State diagram for page aging](Diagrams/Screen Shot 2017-06-28 at 3.51.59 PM.png)
+![State diagram for page aging](Diagrams/Screen_Shot_2017-06-28_at_3.51.59_PM.png)
 
-![Example of aging of a page](Diagrams/Screen Shot 2017-06-28 at 3.53.52 PM.png)
+![Example of aging of a page](Diagrams/Screen_Shot_2017-06-28_at_3.53.52_PM.png)
 
 Because of sharing, a page can be part of the working set of one or more processes. But this does not matter to the page stealer. It is just that there is more chance of the page getting referred. The kernel wake up the page stealer when memory is below a low-water mark and the page stealer swaps out pages until the available memory goes above a high-water mark. Because of swapping out up till a high-water mark, the memory usage does not go below to the low-water mark quickly. Administrators can configure the low and high water mark values.
 
@@ -280,7 +280,7 @@ When the kernel writes a page to swap device, it turns off the *valid* bit in it
 
 For example, suppose the page stealer swaps out 30, 40, 50, and 20 pages from processes A, B, C, and D, respectively, and that it writes 64 pages to the swap device in one disk write operation. The figure shows the sequence of page-swapping operations that would occur if the order is A, B, C, and D.
 
-![Page stealer sequence](Diagrams/Screen Shot 2017-06-28 at 4.45.46 PM.png)
+![Page stealer sequence](Diagrams/Screen_Shot_2017-06-28_at_4.45.46_PM.png)
 
 ### Page Faults
 
@@ -344,9 +344,9 @@ The page that caused the fault could have the following states:
 
 Let us see each case in detail. Consider the following states of data structure:
 
-![Occurrence of a validity fault](Diagrams/Screen Shot 2017-06-28 at 6.24.26 PM.png)
+![Occurrence of a validity fault](Diagrams/Screen_Shot_2017-06-28_at_6.24.26_PM.png)
 
-![After swapping page into memory](Diagrams/Screen Shot 2017-06-28 at 6.24.39 PM.png)
+![After swapping page into memory](Diagrams/Screen_Shot_2017-06-28_at_6.24.39_PM.png)
 
 In case 1, the page is on the swap device, that means it once resided in the main memory. From the disk block descriptor, the kernel finds the swap device and block number where the page is stored and verifies that the page is not in the page cache. The kernel updates the page table entry so that it points to the page about to be read in, places the pfdata table entry on a hash list and reads the page from the swap device.
 
@@ -356,7 +356,7 @@ In case 2, the page is on the free list. It then ignores the block number in the
 
 If a process is trying to read a page while other process just faulted over it and is reading the page in, the process trying to read the page sleeps because the region is locked by the process which is reading page in. The following figure shows such condition:
 
-![Double fault on a page](Diagrams/Screen Shot 2017-06-28 at 11.52.31 PM.png)
+![Double fault on a page](Diagrams/Screen_Shot_2017-06-28_at_11.52.31_PM.png)
 
 If the page is not on in memory neither in swap space, it has to be read from the executable file (case 3). The fault handler examines the disk block descriptor, finds the logical block number in the file that contains the page, and finds the inode associated with the region table entry. It uses the logical block number as an offset into the array of disk block numbers attached to the inode during *exec*. Knowing the disk block number, it reads the page into memory. In the example figure, the virtual address 1K points that the contents of that page are in logical block 3 in the executable file.
 

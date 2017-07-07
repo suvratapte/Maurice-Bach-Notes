@@ -16,7 +16,7 @@ The complete set of process states:
 8. Newly created. Not ready run, nor sleeping. This is the start state for all processes expect process 0.
 9. The process executed *exit* system call and is in the *zombie* state. The process no longer exists, but it leaves a record containing an exit code and some timing statistics for its parent process to collect. The zombie state is the final state of a process.
 
-![Process state transition diagram](Diagrams/Screen Shot 2017-06-15 at 9.59.07 PM.png)
+![Process state transition diagram](Diagrams/Screen_Shot_2017-06-15_at_9.59.07_PM.png)
 
 The process enters the *created* state when the parent process executes the fork system call model and eventually moves into a state where it is ready to run (3 or 5). The scheduler will eventually pick the process and the process enters the state *kernel running*, where it completes its part of *fork* system call. After the completion of system call, it may move to *user running*. When interrupts occur (such as system call), it again enters the state *kernel running*. After the servicing of the interrupt the kernel may decide to schedule another process to execute, so the first process enters the state *preempted*. The state *preempted* is really same as the state *ready to run in memory*, but they are depicted separately to stress that a process executing in kernel mode can be preempted only when it is about to return to user mode. Consequently, the kernel could swap a process from the state *preempted* if necessary. Eventually, it will return to *user running* again.
 
@@ -70,7 +70,7 @@ The region table entries contain the physical locations at which the region is s
 
 An example of regions:
 
-![Processes and regions](Diagrams/Screen Shot 2017-06-16 at 9.53.05 AM.png)
+![Processes and regions](Diagrams/Screen_Shot_2017-06-16_at_9.53.05_AM.png)
 
 The concept of *region*s is independent of the memory management policies.
 
@@ -82,11 +82,11 @@ When kernel assigns physical pages of memory to a region, it need not assign the
 
 The kernel maintains a mapping of logical to physical page numbers in a table which looks like this:
 
-![Mapping of logical to physical page numbers](Diagrams/Screen Shot 2017-06-16 at 5.47.26 PM.png)
+![Mapping of logical to physical page numbers](Diagrams/Screen_Shot_2017-06-16_at_5.47.26_PM.png)
 
 These tables are called *page tables*. Region table entry has pointers to page tables. Since logical address space is contiguous, it is just the index into an array of physical page numbers. The page tables also contain hardware dependent information such as permissions for pages. Modern machines have special hardware for address translation. Because software implementation of such translation would be too slow. Hence, when a process starts executing, the kernel tells the hardware where its page tables reside.
 
-![Mapping of virtual to physical addresses](Diagrams/Screen Shot 2017-06-16 at 5.49.54 PM.png)
+![Mapping of virtual to physical addresses](Diagrams/Screen_Shot_2017-06-16_at_5.49.54_PM.png)
 
 For being hardware independent, let us assume that the hardware has register triples (in abundance) which the kernel uses for memory management. The first register in the triple contains the address of the page table, the second register contains the first virtual address mapped by the page table, and the third register contains control information such as number of pages in page tables and page access permissions. When executing a process, the kernel loads such register triples with the data in the pregion entries.
 
@@ -98,7 +98,7 @@ Even if the kernel executes in the context of a process, its virtual address spa
 
 Example:
 
-![Changing mode from user to kernel](Diagrams/Screen Shot 2017-06-16 at 6.24.52 PM.png)
+![Changing mode from user to kernel](Diagrams/Screen_Shot_2017-06-16_at_6.24.52_PM.png)
 
 ### The U Area
 
@@ -106,7 +106,7 @@ Even if every process has a u-area, the kernel accesses them through its *u* var
 
 Example:
 
-![Memory map of u-area in kernel](Diagrams/Screen Shot 2017-06-16 at 6.37.23 PM.png)
+![Memory map of u-area in kernel](Diagrams/Screen_Shot_2017-06-16_at_6.37.23_PM.png)
 
 The first two register triples point to text and data and the third triple refers to the u-area of currently executing process (in this case, process D). When a context switch happens, the entry in this fields changes and points to the u-area of the newly scheduled process. Entries 1 and 2 do not change as all the process share the kernel text and data.
 
@@ -145,7 +145,7 @@ The kernel pushes a context layer when an interrupt occurs, when a process makes
 
 The following figure shows the components that form the context of a process:
 
-![Components of the context of a process](Diagrams/Screen Shot 2017-06-17 at 12.51.32 PM.png)
+![Components of the context of a process](Diagrams/Screen_Shot_2017-06-17_at_12.51.32_PM.png)
 
 The right side of the figure shows the dynamic portion of the context. It consists of several stack frames where each stack frame contains saved register context of the previous layer and the kernel stack as it executes in that layer. System context layer 0 is a dummy layer that represents the user-level context; growth of the stack here is in the user address space and the kernel stack is null. The process table entry contains the information to recover the current layer in of the process (shown by the arrow).
 
@@ -160,7 +160,7 @@ The system is responsible for handling interrupts and exceptions. If the system 
 1. It saves the current register context of the executing process and creates (pushes) a new context layer.
 2. The kernel determines the source (cause) of the interrupt, and if applicable, unit number (such as which drive caused the interrupt). When the system receives an interrupt, it gets a number. It uses that number as an index into the *interrupt vector*, which stores the actions to be taken (interrupt handlers) when interrupts occur. Example of *interrupt vector*:
 
-![Interrupt vector](Diagrams/Screen Shot 2017-06-17 at 12.51.32 PM.png)
+![Interrupt vector](Diagrams/Screen_Shot_2017-06-17_at_12.51.32_PM.png)
 
 3. The kernel invokes the interrupt handler. The kernel stack of the new context layer is logically distinct from the kernel stack of the previous context layer. Some implementations use the processes kernel stack to store the stack frame of an interrupt handler, while some implementations use a global interrupt stack for the interrupt handlers which are guaranteed to return without a context switch.
 4. The kernel returns from the interrupt handler and executes a set of hardware instructions which restore the previous context. The interrupt handler may affect the behavior of the process as it might modify the kernel data structures. But usually, the process resumes execution as if the interrupt never occurred.
@@ -184,7 +184,7 @@ The algorithm for interrupt handling is given below:
 
 Example of state of the context layer as stack as system call is executed and interrupts occur:
 
-![Example of interrupts](Diagrams/Screen Shot 2017-06-17 at 1.32.54 PM.png)
+![Example of interrupts](Diagrams/Screen_Shot_2017-06-17_at_1.32.54_PM.png)
 
 ### System Call Interface
 
@@ -218,11 +218,11 @@ Register 0 and 1 are used to exchange information between user mode and kernel m
 
 Consider the following code which calls the *creat* function of the C library. And the assembly code generated by the compiler (on a Motorola 68000) :
 
-![Creat system call and generated code](Diagrams/Screen Shot 2017-06-17 at 2.35.50 PM.png)
+![Creat system call and generated code](Diagrams/Screen_Shot_2017-06-17_at_2.35.50_PM.png)
 
 Consider the stack configuration for the above program:
 
-![Stack configuration for the creat system call](Diagrams/Screen Shot 2017-06-17 at 2.41.59 PM.png)
+![Stack configuration for the creat system call](Diagrams/Screen_Shot_2017-06-17_at_2.41.59_PM.png)
 
 The code for main begins at address 58. It copies the parameters 0666 and the variable "name" onto the user stack. The order in which the parameters are copied is machine dependent. Then it calls the C library function *creat* at address 64. The function is at address 7a. The return address from the function call is 6a, and the process pushes this number on the stack. The function places the value 8 (number of the creat system call) in register 0 and then executes the trap instruction which makes the system switch to kernel mode. The kernel checks the number of the system call and determines that the routine for *creat* is to be executed. It determines the number of parameters to the system call and copies them to the u-area from the user stack. When the system call returns, the interrupt handler checks it the u-area field for error is set, and if it is, it sets the carry bit and places the error code in register 0, and returns. The library routine then checks if carry bit is set, if it is, it jumps to address 13c. It moves the error code from register 0 to a global variable *errno* at address 20e and moves -1 in the data register 0, and returns to address 86. If the carry bit was not set, the creat library function will return and further execution will start after the call at address 64. Register 0 contains the return value from the system call.
 
@@ -267,7 +267,7 @@ The process executes in kernel mode *or* in user mode. But the system calls need
 
 This is the VAX code for moving one character from user to kernel address space:
 
-![Moving data from user to system space in VAX](Diagrams/Screen Shot 2017-06-17 at 4.11.45 PM.png)
+![Moving data from user to system space in VAX](Diagrams/Screen_Shot_2017-06-17_at_4.11.45_PM.png)
 
 The *prober* instruction checks if one byte at the address *argument pointer register + 4* (indicated by : *4(ap)*) could be read in user mode (mode 3). If not, the kernel branches to address *eret*, stores -1 in register 0, and returns; the move failed. Otherwise, the kernel copies one byte from the user given address to register 0 and returns the value to the caller. The procedure requires 5 instructions (with the call to *fubyte*) to move 1 character; the process is expensive.
 
@@ -424,7 +424,7 @@ The algorithm *loadreg* is given below:
 
 For example, if the kernel wants to load text of size 7K into a region that is attached at virtual address 0 of a process but wants to leave a gap of 1K bytes at the beginning of the region. By this time, the kernel will have allocated a region table entry and will have attached the region at address 0 using algorithms *allocreg* and *attachreg*. Now it invokes *loadreg*, which invokes *growreg* twice -- first, to account for the 1K byte gap at the beginning of the region, and second, to allocate storage for the contents of the region -- and *growreg* allocates a page table for the region. The kernel then sets up fields in the u-area to read the file: It reads 7K bytes from a specified byte offset in the file (supplies as a parameter by the kernel) into virtual address 1K of the process. It is shown in the following diagram:
 
-![Loading a text region](Diagrams/Screen Shot 2017-06-18 at 4.18.51 PM.png)
+![Loading a text region](Diagrams/Screen_Shot_2017-06-18_at_4.18.51_PM.png)
 
 ### Freeing a Region
 
@@ -505,13 +505,13 @@ In the *fork* system call, the kernel needs to duplicate the regions of a proces
 
 The state of regions when process A *fork*s process B:
 
-![Duplicating a region](Diagrams/Screen Shot 2017-06-18 at 6.13.11 PM.png)
+![Duplicating a region](Diagrams/Screen_Shot_2017-06-18_at_6.13.11_PM.png)
 
 ## Sleep
 
 Processes sleep inside of system calls awaiting for a particular resource or even if a page fault occurs. In such cases, they push a context layer and do a context switch. The context layers of a sleep process are shown below:
 
-![Context layers of a sleeping process](Diagrams/Screen Shot 2017-06-19 at 9.31.19 AM.png)
+![Context layers of a sleeping process](Diagrams/Screen_Shot_2017-06-19_at_9.31.19_AM.png)
 
 ### Sleep Event and Addresses
 
@@ -519,7 +519,7 @@ As seen previously, processes sleep on a particular event (for example, unlockin
 
 Another disadvantage is that, multiple events can map to a single address. As shown in the figure below:
 
-![Processes sleeping on events and events mapping into addresses](Diagrams/Screen Shot 2017-06-19 at 9.36.00 AM.png)
+![Processes sleeping on events and events mapping into addresses](Diagrams/Screen_Shot_2017-06-19_at_9.36.00_AM.png)
 
 Many process are waiting on addr A but some are waiting for the buffer while a process is awaiting I/O completion. On any of these two events, all the processes will be woken up. Even though any one of these two events occurs, all the process will be woken up since they are sleeping on the same address. It would have been better if there was a one-to-one mapping, but practically, such clashes are rare and system performance is not affected.
 

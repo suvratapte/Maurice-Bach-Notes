@@ -36,7 +36,7 @@ This algorithm is executed at the conclusion of a context switch. It selects the
 
 Each process table entry contains a priority field. The priority is a function of recent CPU usage, where the priority is lower if a process has recently used the CPU. The range of priorities can be partitioned in two classes: user priorities and kernel priorities. It is shown in the diagram below:
 
-![Range of process priorities](Diagrams/Screen Shot 2017-06-23 at 9.56.25 AM.png)
+![Range of process priorities](Diagrams/Screen_Shot_2017-06-23_at_9.56.25_AM.png)
 
 Each priority has a queue of processes logically associated with it. The processes with user-level priorities were preempted on their return from the kernel to user mode, and processes with kernel-level priorities achieved them in the *sleep* algorithm. User priorities are below a threshold value and kernel priorities are above a threshold value. Processes with low kernel priority wake up on receipt of a signal, but processes with high kernel priority continue to sleep. The user level 0 is the highest user level priority and user level n is the lowest.
 
@@ -62,7 +62,7 @@ If a process is in critical region of the kernel (i.e. the process execution lev
 
 Consider the following time diagram:
 
-![Example of process scheduling](Diagrams/Screen Shot 2017-06-23 at 9.56.25 AM.png)
+![Example of process scheduling](Diagrams/Screen_Shot_2017-06-23_at_9.56.25_AM.png)
 
 Process A, B, and C are created and initially given the priority 60, which is the highest user-level priority. Assuming that the processes make no system calls, and process A gets scheduled first, after one second the CPU count of A becomes 60. And when it is recalculated, it becomes 30 (decay = 60 / 2). And the priority becomes 75 (priority = 30 / 2 + 60). Then B gets scheduled and the calculation continues every second.
 
@@ -86,7 +86,7 @@ To implement this scheme, another field is added in the u-area for "fair share g
 
 For example, consider the processes in the following diagram:
 
-![Example of a fair share scheduler](Diagrams/Screen Shot 2017-06-23 at 11.55.07 PM.png)
+![Example of a fair share scheduler](Diagrams/Screen_Shot_2017-06-23_at_11.55.07_PM.png)
 
 Process A belongs to one group and processes B and C belong to another group. Therefore, the "group" value is shared between B and C. The priorities will be calculated by this formula :
 
@@ -234,7 +234,7 @@ Some kernel functions require invocation on a real-time basis (such as device dr
 
 The user has no direct control over the entries in the callout table; various kernel algorithms make entries as needed. The kernel sorts entries in the callout table according to their respective "time to fire". Because of such ordering, the time field for each entry in the callout table is stored as the amount of time to fire after the previous element fires. Decrementing the time field for the first entry effectively decrements the time for all functions. For example, look at the following diagram (the time of "c()" is decreased after "f()" gets added which has the time 2):
 
-![Callout table](Diagrams/Screen Shot 2017-06-25 at 5.28.53 PM.png)
+![Callout table](Diagrams/Screen_Shot_2017-06-25_at_5.28.53_PM.png)
 
 The clock interrupt handler does not call the callout functions directly, because it doesn't know how much time they will take, and it does not want to block the clock handler for that reason. Therefore, it sends a "software interrupt" to schedule such functions. Software interrupts are at a lower priority and therefore can get blocked in the execution level is set to a higher level. In such cases, the time field in the callout table could be a negative number. Since it is possible that the time fields of the first entries in the callout table are 0 or negative, the clock handler must find the first entry whose time field is positive and decrement it. In the above example, the time field of the entry for function *a* is -2, meaning that the system took 2 clock interrupts after *a* was eligible to be called. Assuming the entry for *b* was in the table 2 ticks ago, the kernel skipped the entry for *a* and decremented the time field for *b*.
 
@@ -244,7 +244,7 @@ The kernel profile driver monitors the relative performance of kernel modules by
 
 For example, the following figure shows hypothetical addresses of several kernel routines:
 
-![Sample addresses of kernel algorithms](Diagrams/Screen Shot 2017-06-26 at 12.36.32 PM.png)
+![Sample addresses of kernel algorithms](Diagrams/Screen_Shot_2017-06-26_at_12.36.32_PM.png)
 
 If the sequence of program counter values sampled over 10 clock interrupts is 110, 330, 145, addresses in user space, 125, 440, 130, 320, addresses in user space, and 104, the figure shows the counts the kernel would save. Examining these figures, one would conclude that the system spends 20% of its time in user mode and 50% of its time executing the kernel algorithm *bread*.
 
@@ -256,11 +256,11 @@ where `buff` is the address of an array in user space, `bufsize` is the size of 
 
 Consider the following program:
 
-![Program invoking profil system call](Diagrams/Screen Shot 2017-06-26 at 1.02.23 PM.png)
+![Program invoking profil system call](Diagrams/Screen_Shot_2017-06-26_at_1.02.23_PM.png)
 
 Running the program for about 10 seconds on a lightly loaded AT&T 3B20 computer gave this output:
 
-![Sample output of profile program](Diagrams/Screen Shot 2017-06-26 at 1.04.35 PM.png)
+![Sample output of profile program](Diagrams/Screen_Shot_2017-06-26_at_1.04.35_PM.png)
 
 The address of *f* is 204 greater than the 0th profiling address; because the size of the text of *f* is 12 bytes (216 - 208) and the size of an integer is 4 on AT&T 3B20 computer, the addresses of *f* map into *buf* entries 51, 52, 53. Similarly, the addresses of *g* map into *buf* entries 54, 55 and 56. The *buf* entries 46, 48, and 49 are for addresses in the loop in function *main*. In typical usage, the range of addresses to be profiled is determined by examination of the text addresses in the symbol table of the program being profiled. Users are discouraged from using the *profil* call directly because it is complicated; instead, an option on the C compiler directs the compiler to generate code to profile processes.
 

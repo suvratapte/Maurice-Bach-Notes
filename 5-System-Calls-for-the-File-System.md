@@ -2,7 +2,7 @@
 
 Systems calls related to the file system and their relation to other algorithms is given in the diagram below:
 
-![File system calls and relation to other algorithms](Diagrams/Screen Shot 2017-06-12 at 9.30.17 AM.png)
+![File system calls and relation to other algorithms](Diagrams/Screen_Shot_2017-06-12_at_9.30.17_AM.png)
 
 ## Open
 
@@ -47,7 +47,7 @@ fd3 = open ("/etc/passwd", O_WRONLY);
 
 In this case, the state of the in-core inode table, file table, and user file descriptor table will be like this:
 
-![Data structures after open](Diagrams/Screen Shot 2017-06-12 at 9.53.29 AM.png)
+![Data structures after open](Diagrams/Screen_Shot_2017-06-12_at_9.53.29_AM.png)
 
 Entries in the user file descriptor table point to unique entries in the file table even though "/etc/passwd" is opened twice. This is needed because the modes of open could be different and even if they are not, the offsets need to be maintained separately. Both the file table entries point to the same in-core inode table entry.
 
@@ -60,7 +60,7 @@ fd2 = open ("private", O_RDONLY);
 
 The state of the tables will be like this:
 
-![Data structures after two processes open files](Diagrams/Screen Shot 2017-06-12 at 10.06.06 AM.png)
+![Data structures after two processes open files](Diagrams/Screen_Shot_2017-06-12_at_10.06.06_AM.png)
 
 The file table entries created by different process for the same file point to the same in-core inode table entry. The offsets could have been stored in the user file descriptor table entries as well, eliminating the need of the file table. But the additional indirection to the file table enables sharing of files (using *dup* and *fork* system calls) as we will see later.
 
@@ -343,7 +343,7 @@ Pipes allow transfer of data between processes in a first-in-first-out manner. T
 
 Access to unnamed pipes is shared only for child processes. For example, in the following diagram, process B has called *pipe* so that pipe can be used only by process B, D, and E. But process A and C cannot access the pipe. However, named pipes can be shared between any processes.
 
-![Process tree and sharing pipes](Diagrams/Screen Shot 2017-06-13 at 6.19.43 PM.png)
+![Process tree and sharing pipes](Diagrams/Screen_Shot_2017-06-13_at_6.19.43_PM.png)
 
 ### The Pipe System Call
 
@@ -387,7 +387,7 @@ A pipe should be viewed as if processes write on one end of the pipe and read fr
 
 The storage mechanism for a regular file and a pipe is similar. The kernel uses the data blocks from the pipe device. But there is a difference, the pipe uses only direct blocks of the inode for efficiency. But this places a limit on the size of the pipe at a time. The kernel manipulates the direct blocks of the inode as a circular queue. It maintains read and write pointers internally to preserve the FIFO order, as shown in the figure:
 
-![Logical view of reading and writing a pipe](Diagrams/Screen Shot 2017-06-13 at 7.22.43 PM.png)
+![Logical view of reading and writing a pipe](Diagrams/Screen_Shot_2017-06-13_at_7.22.43_PM.png)
 
 We will study 4 cases:
 
@@ -472,7 +472,7 @@ The kernel only allows the superuser to *mount* or *unmount* file systems. After
 
 State of data structures after *mount*:
 
-![Data structures after mount](Diagrams/Screen Shot 2017-06-14 at 3.29.47 PM.png)
+![Data structures after mount](Diagrams/Screen_Shot_2017-06-14_at_3.29.47_PM.png)
 
 ## Crossing Mount Points in File Path Names
 
@@ -629,7 +629,7 @@ link ("/usr/include/realfile.h", "/usr/src/uts/sys/testfile.h");
 
 the 3 pathnames refer to the same file: "/usr/src/uts/sys/testfile.h", "/usr/include/sys/testfile.h", "/usr/include/realfile"
 
-![Linked files in file system tree](Diagrams/Screen Shot 2017-06-14 at 9.40.02 PM.png)
+![Linked files in file system tree](Diagrams/Screen_Shot_2017-06-14_at_9.40.02_PM.png)
 
 Only a superuser is allowed to link directories. This is done to avoid mistakes by arbitrary users. If a user *links* a directory to a child directory, a program which accesses that pathname will enter in a infinite loop.
 
@@ -728,11 +728,11 @@ There are many possible race conditions around the *unlink* system call. Suppose
 
 However, this check is not enough. After unlinking, another process could create a file which could use the same inode, hence incrementing its reference count. And then the reading process will access a different file. But at least, the system integrity is maintained. And such race condition is extremely rare in practice. It is shown in the figure below:
 
-![Unlink race condition](Diagrams/Screen Shot 2017-06-15 at 9.16.23 AM.png)
+![Unlink race condition](Diagrams/Screen_Shot_2017-06-15_at_9.16.23_AM.png)
 
 Consider the following program:
 
-![Unlinking an opened file](Diagrams/Screen Shot 2017-06-15 at 9.21.42 AM.png)
+![Unlinking an opened file](Diagrams/Screen_Shot_2017-06-15_at_9.21.42_AM.png)
 
 The process *unlinks* the file which was just opened. So there is no directory entry for the file and hence the *stat* system call fails. But *fstat* succeeds as it refers the inode by the file descriptor. After the program ends, the process *close*es the file and its inode reference count drops to 0 and the file gets deleted. Sometimes, processes use this kind of mechanism for creating temporary files.
 

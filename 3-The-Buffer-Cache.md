@@ -15,7 +15,7 @@ Two parts of the buffer:
 
 Data in a buffer corresponds to data in a logical disk block on a file system. A disk block can **never** map into more than one buffer at a time.
 
-![Buffer header](Diagrams/Screen Shot 2017-06-07 at 10.27.45 PM.png)
+![Buffer header](Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png)
 
 The *device number* fields specifies the logical file system (not physical device) and *block number* block number of the data on disk. These two numbers *uniquely* identify the buffer. The *status* field summarizes the current status of the buffer. The *ptr to data area* is a pointer to the data area, whose size must be at least as big as the size of a disk block.
 
@@ -33,11 +33,11 @@ The two set of pointers in the header are used for traversal of the buffer queue
 
 The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence the buffers closer and closer to the head of the list are the most recently used ones.
 
-![Free list of buffers](Diagrams/Screen Shot 2017-06-07 at 10.44.09 PM.png)
+![Free list of buffers](Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png)
 
 When the kernel accesses a disk block, it searches for the buffer with the appropriate device-block number combination. Rather than search the entire buffer pool, it organizes the buffers into separate queues, *hashed* as a function of the device and block number. The hash queues are also doubly linked circular lists. A hashing function which uniformly distributes the buffers across the lists is used. But it also has to be simple so that the performance does not suffer.
 
-![Buffers on the Hash Queues](Diagrams/Screen Shot 2017-06-07 at 10.52.09 PM.png)
+![Buffers on the Hash Queues](Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png)
 
 The hash function shown in the figure only depends on the block number; real hash functions depend on device number as well.
 
@@ -131,33 +131,33 @@ The states of hash queues for different scenarios are shown in following figures
 
 Scenario 1
 
-![Scenario 1](Diagrams/Screen Shot 2017-06-07 at 11.28.20 PM.png)
+![Scenario 1](Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png)
 
 Scenario 2
 
 Here the buffer is not on the hash queue, so a buffer from free list is removed and then its device and block numbers are changed.
 
-![Scenario 2](Diagrams/Screen Shot 2017-06-07 at 11.30.35 PM.png)
+![Scenario 2](Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png)
 
 Scenario 3
 
-![Scenario 3](Diagrams/Screen Shot 2017-06-07 at 11.30.14 PM.png)
+![Scenario 3](Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png)
 
 Scenario 4
 
-![Scenario 4](Diagrams/Screen Shot 2017-06-07 at 11.31.17 PM.png)
+![Scenario 4](Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png)
 
 Race for free buffer
 
-![Race for free buffer](Diagrams/Screen Shot 2017-06-07 at 11.48.55 PM.png)
+![Race for free buffer](Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png)
 
 Scenario 5
 
-![Scenario 5](Diagrams/Screen Shot 2017-06-07 at 11.50.00 PM.png)
+![Scenario 5](Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png)
 
 Race for a locked buffer **(this is an important race condition)**
 
-![Race for a locked buffer](Diagrams/Screen Shot 2017-06-07 at 11.53.00 PM.png)
+![Race for a locked buffer](Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png)
 
 **The kernel guarantees that all processes waiting for buffers will wake up, because it allocates buffers during execution of system calls and frees them before returning.**
 

@@ -14,7 +14,7 @@
 
 ## Architecture of UNIX Systems
 
-![Architecture of UNIX Systems](Diagrams/Screen Shot 2017-06-05 at 4.39.07 PM.png)
+![Architecture of UNIX Systems](Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png)
 
 The operating systems interacts directly with the hardware, providing common services to programs and insulating them from hardware idiosyncrasies.
 Programs such as the shell and editors shown in the outer layers interact with the kernel by invoking a well defined set of *system calls*.
@@ -51,7 +51,7 @@ The execution of user processes in a UNIX system is divided in two levels: user 
 
 ### Multiple processes and modes of execution
 
-![Operating system view and hardware view](Diagrams/Screen Shot 2017-06-05 at 5.46.41 PM.png)
+![Operating system view and hardware view](Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png)
 
 In the diagram above, the operating system views from the top (or bottom), it sees which processes are running. However, the hardware view if from the left (or right), it sees which mode is currently active.
 
@@ -67,7 +67,7 @@ Exceptions happen "in the middle" of the execution of an instruction, and the sy
 
 The kernel sometimes wants to prevent occurrence of interrupts when it is doing some important work (such as modifying kernel data structures). In such situations, if the interrupts are not prevented, the kernel itself might get corrupt. Computers typically have a set of privileged instructions that set the processor execution level in the processor status word. Setting the processor execution level to certain values masks off interrupts from the level and lower levels, allowing only higher-level interrupts.
 
-![Typical interrupt levels](Diagrams/Screen Shot 2017-06-05 at 6.04.33 PM.png)
+![Typical interrupt levels](Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png)
 
 ### Memory Management
 

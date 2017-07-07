@@ -2,7 +2,7 @@
 
 A multiprocessor architecture contains two or more CPUs that share common memory and peripherals (as shown in the diagram). Processes can run concurrently run on different processors. But each CPU execute the same copy of the kernel. Processes can migrate between processors transparently. But the design of the UNIX system has to be changed to support multiprocessor systems.
 
-![Multiprocessor configuration](Diagrams/Screen Shot 2017-07-04 at 8.34.31 PM.png)
+![Multiprocessor configuration](Diagrams/Screen_Shot_2017-07-04_at_8.34.31_PM.png)
 
 ## Problem of Multiprocessor Systems
 

@@ -158,7 +158,7 @@ Syntax of *msgsnd*:
 
 The diagram shows the structure of message queues:
 
-![Message queues](Diagrams/Screen Shot 2017-07-03 at 9.40.28 AM.png)
+![Message queues](Diagrams/Screen_Shot_2017-07-03_at_9.40.28_AM.png)
 
 Syntax for *msgrcv*:
 
@@ -226,7 +226,7 @@ Sharing the part of virtual memory and reading to and writing from it, is anothe
 
 where `size` is the number of bytes in the region. If the region is to be created, *allocreg* is used. It sets a flag in the shared memory table to indicate that the memory is not allocated to the region. The memory is allocated only when the region gets attached. A flag is set in the region table which indicates that the region should not be freed when the last process referencing it, *exit*s. The data structure are shown below:
 
-![Data structures for shared memory](Diagrams/Screen Shot 2017-07-03 at 11.20.27 AM.png)
+![Data structures for shared memory](Diagrams/Screen_Shot_2017-07-03_at_11.20.27_AM.png)
 
 Syntax for *shmat*:
 
@@ -295,7 +295,7 @@ The system calls are:
 
 The kernel allocates an entry that points to an array of semaphore structure with *count* elements. It is shown in the figure:
 
-![Data structure for semaphores](Diagrams/Screen Shot 2017-07-03 at 6.02.15 PM.png)
+![Data structure for semaphores](Diagrams/Screen_Shot_2017-07-03_at_6.02.15_PM.png)
 
 The entry also specifies the number of semaphores in the array, the time of the last *semop* call, and the time of the last *semctl* call.
 
@@ -393,7 +393,7 @@ where kernel interprets *arg* based on the value of *cmd*, similar to the way it
 
 To provide common methods for interprocess communication and to allow use of sophisticated network protocols, the BSD system provides a mechanism known as *sockets*. The kernel structure consists of three parts: the socket layer, the protocol layer, and the device layer, as shown in the figure:
 
-![Sockets model](Diagrams/Screen Shot 2017-07-04 at 1.37.34 PM.png)
+![Sockets model](Diagrams/Screen_Shot_2017-07-04_at_1.37.34_PM.png)
 
 The socket layer contains the protocol modules used for communication, and the device layer contains the device drivers that control the network devices. Sockets that share common communications properties, such as naming conventions and protocol address formats, are grouped into *domains*. For example, the "UNIX system domain" or "Internet domain". Each socket has a type -- a *virtual circuit* or *datagram*. A virtual circuit allows sequenced, reliable delivery of data. Datagrams do not guarantee sequenced, reliable, or unduplicated delivery, but they are less expensive than virtual circuits, because they do not require expensive setup operations.
 

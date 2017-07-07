@@ -4,7 +4,7 @@ Even though accessing files from the network is possible, the user is aware of t
 
 In a distributed system, each computer is an autonomous unit and has a CPU, memory and peripherals. The kernels on each machine can also be independent, but they must satisfy the constraints to be a part of the distributed system. The architecture is shown below:
 
-![Model of distributed architectures](Diagrams/Screen Shot 2017-07-06 at 9.37.02 AM.png)
+![Model of distributed architectures](Diagrams/Screen_Shot_2017-07-06_at_9.37.02_AM.png)
 
 Distributed systems have been implemented and they roughly fall into the following categories:
 	
@@ -16,7 +16,7 @@ Distributed systems have been implemented and they roughly fall into the followi
 
 The architecture of the satellite configuration is given below:
 
-![Satellite configuration](Diagrams/Screen Shot 2017-07-06 at 9.53.52 AM.png)
+![Satellite configuration](Diagrams/Screen_Shot_2017-07-06_at_9.53.52_AM.png)
 
 Such configuration improves system throughput by offloading processes from the central processor and executing them on the satellite processors. Satellite processors have no peripherals except for the ones needed to communicate with the central processor. The file system and all devices are on the central processor. Processes do not migrate between satellite processor. The satellite processor contains a simplified operating system to handle local system calls, interrupts, and so on.
 
@@ -24,7 +24,7 @@ When the system is initialized, the kernel on the central processor downloads a 
 
 When a process on the satellite processor wants to execute a system call like *open* which needs the central processor, the process sends a message in a particular format to the stub process, which executes the system call and returns the response in a particular format, as shown in the figure:
 
-![Message formats](Diagrams/Screen Shot 2017-07-06 at 10.17.50 AM.png)
+![Message formats](Diagrams/Screen_Shot_2017-07-06_at_10.17.50_AM.png)
 
 The satellite process sleeps until it receives a response.
 
@@ -32,11 +32,11 @@ Consider what happens when a satellite process makes a *getppid* call. The satel
 
 When the central processor executes the *fork* system call, the kernel selects a satellite to execute the process and sends a message to a special server process on the satellite, informing it that it is about download a process. If the server accepts the request, it does a *fork* to create a new satellite process. The central processor downloads a copy of the *fork*ing process to the satellite processor, overwriting the address space of the process just created there, *fork*s a local stub process to communicate with the new satellite process, and sends a message to the satellite processor to initialize the program counter of the new process. The stub process is the child of the *fork*ing process; the satellite process is technically a child of the server process, but it is logically a child of the process that *fork*ed. The server process has no logical connection to the child process. The satellite and stub processes have the same process ID. The scenario is depicted in the diagram below:
 
-![Fork on the central processor](Diagrams/Screen Shot 2017-07-06 at 3.26.13 PM.png)
+![Fork on the central processor](Diagrams/Screen_Shot_2017-07-06_at_3.26.13_PM.png)
 
 When a satellite process *fork*s, a request is sent to the central processor. It does similar operations and creates a process on another satellite, as shown in the figure:
 
-![Fork on a satellite processor](Diagrams/Screen Shot 2017-07-06 at 3.43.50 PM.png)
+![Fork on a satellite processor](Diagrams/Screen_Shot_2017-07-06_at_3.43.50_PM.png)
 
 When a satellite process *exit*s, it sends an *exit* message to the stub, and the stub *exit*s. The stub cannot initiate an *exit* sequence.
 
@@ -80,7 +80,7 @@ A stub process handles system calls for a satellite, so it must react to signals
 
 Example of a satellite process making a *read* system call (and receiving a signal):
 
-![Interrupt in middle of a system call](Diagrams/Screen Shot 2017-07-06 at 4.21.53 PM.png)
+![Interrupt in middle of a system call](Diagrams/Screen_Shot_2017-07-06_at_4.21.53_PM.png)
 
 If a process on the satellite receives a signal while its stub process is executing a system call, the satellite process (it wakes up due to the signal) sends a special message to the stub, informing the occurrence of the signal. The kernel on the central processor reads the message and sends the signal to the stub, which reacts as usual to the signal. The satellite process cannot send the message to the stub directly, because the stub is in the middle of a system call and is not *read*ing the communications line.
 
@@ -106,13 +106,13 @@ Allowing superuser access on remote files could circumvent security measures on 
 
 The users on this type of distribution can access files on another machine without realizing that they cross a machine boundary. The path names for remote files contain no distinguishing symbol and look exactly like local pathnames. The example below shows the structure where "/usr/src" on system B is mounted on "/usr/src" on system A. The *mount* system call is adapted for remote file systems. The kernel contains an expanded mount table.
 
-![Mounting a remote files](Diagrams/Screen Shot 2017-07-07 at 9.49.52 AM.png)
+![Mounting a remote files](Diagrams/Screen_Shot_2017-07-07_at_9.49.52_AM.png)
 
 Communication with a remote machine takes on one of two forms: remote procedure call or remote system call.
 
 In a remote procedure call design, each kernel procedure that deals with inodes recognizes whether a particular inode refers to a remote file and, if it does, sends a message to the remote machine to perform a specific inode operation. The kernel data structures and their relationship is shown below:
 
-![Remote files](Diagrams/Screen Shot 2017-07-07 at 1.18.30 PM.png)
+![Remote files](Diagrams/Screen_Shot_2017-07-07_at_1.18.30_PM.png)
 
 This scheme suffers from frequency of network use, which is potentially several times per system call. Several operations can be combined into one message to reduce network traffic.
 

@@ -20,7 +20,7 @@ There are three stages at which device configuration can be specified:
 
 The kernel to driver interface is describes by the *block device switch table* and the *character device switch table*, as shown in the figure:
 
-![Driver entry points](Diagrams/Screen Shot 2017-06-29 at 9.45.20 AM.png)
+![Driver entry points](Diagrams/Screen_Shot_2017-06-29_at_9.45.20_AM.png)
 
 Each device has its entry in one or both the switch tables. The system calls refer to the switch tables and then invoke the required driver routine, as shown in the diagram above.
 
@@ -32,7 +32,7 @@ Administrators set up device special files with the *mknod* command, supplying f
 
 `/dev/tty13` is the file name of the device, `c` specifies that its a character special file (*b* specifies a block special file), 2 is the major number, and 13 is the minor number. The major number indicates a device type that corresponds to the appropriate entry in the block or character device switch tables, and minor number indicates a unit of the device. Example of the tables is given below:
 
-![Sample block and character device switch tables](Diagrams/Screen Shot 2017-06-29 at 10.02.49 AM.png)
+![Sample block and character device switch tables](Diagrams/Screen_Shot_2017-06-29_at_10.02.49_AM.png)
 
 The entries in the tables describe the routines to be called for respective system calls. The routine *nulldev* is an "empty" routine, used when there is no need for a particular driver function. Many peripheral devices can be associated with a major number; the minor number distinguishes them from each other. Device special files do not have to be created on every boot.
 
@@ -151,7 +151,7 @@ Calls such as *stat* and *chmod* work for devices as they do for regular files; 
 
 The kernel invokes the device specific interrupt handler, passing it the device number or other parameters to identify the specific unit that caused the interrupt. Figure shows the structure of device interrupts:
 
-![Device interrupts](Diagrams/Screen Shot 2017-06-29 at 11.39.39 PM.png)
+![Device interrupts](Diagrams/Screen_Shot_2017-06-29_at_11.39.39_PM.png)
 
 ## Disk Drivers
 
@@ -179,13 +179,13 @@ The functions of a line discipline are:
 
 Although, only terminal uses the line discipline, it could be required by other processes as well, therefore, the correct place to put it, is in the kernel. The following figure shows the logical flow of data through the terminal driver and line discipline and the corresponding flow of control through the terminal driver.
 
-![Call sequence and data flow through line discipline](Diagrams/Screen Shot 2017-06-30 at 12.27.36 AM.png)
+![Call sequence and data flow through line discipline](Diagrams/Screen_Shot_2017-06-30_at_12.27.36_AM.png)
 
 ### Clists
 
 *Clist* is a short form for *character list*. Line disciplines manipulate data on *clists*. It is a variable length linked list of *cblocks* with a count of number of characters on the list. A *cblock* contains a pointer to the next *cblock*, a small character array and a set of offsets indicating the position of the valid data in the *cblock*. It is shown in the figure:
 
-![a cblock](Diagrams/Screen Shot 2017-06-30 at 9.25.13 AM.png)
+![a cblock](Diagrams/Screen_Shot_2017-06-30_at_9.25.13_AM.png)
 
 The *start* offset indicates the first location of valid data in the array and *end* offset indicates the first location of invalid data.
 
@@ -200,12 +200,12 @@ The kernel maintains a linked list of free cblocks and has six operations on cli
 
 Example of removing a character from clist:
 
-![Removing characters from clist](Diagrams/Screen Shot 2017-06-30 at 9.50.31 AM.png)
+![Removing characters from clist](Diagrams/Screen_Shot_2017-06-30_at_9.50.31_AM.png)
 
 
 Example placing a character on a clist:
 
-![Placing a character on a clist](Diagrams/Screen Shot 2017-06-30 at 9.52.01 AM.png)
+![Placing a character on a clist](Diagrams/Screen_Shot_2017-06-30_at_9.52.01_AM.png)
 
 **The Terminal Driver in Canonical Mode**
 
@@ -349,19 +349,19 @@ The kernel allocates queue pairs, which are adjacent in memory.
 
 A device with a streams driver is a character device; it has a special field in the character device switch table that points to a streams initialization structure. When the kernel executes the *open* system call and discovers that the device file is character special, it examines the new field in the character device switch table. If there is no entry there, the driver is not a streams driver. For the first open of a streams driver, the kernel allocates two pairs of queues, one for the *strem-head* and other for the device. The stream-head module is identical for all instances of open streams: It has generic put and service procedures and is the interface to higher-level kernel modules that implement the *read*, *write*, and *ioctl* system calls. The kernel initializes the driver queue structure, assigning queue pointers and copying addresses of driver routines from a per-driver initialization structure, and invokes the driver open procedure. The driver open procedure does the usual initialization but also saves information to recall the queue with which it is associated. Finally, the kernel assigns a special pointer in the in-core inode to indicate the stream-head. When another process *open*s the device, the kernel finds the previously allocated stream via the inode pointer and invokes the open procedure of all modules on the stream. A diagram of the structure is given below:
 
-![A stream after open](Diagrams/Screen Shot 2017-07-01 at 12.32.37 PM.png)
+![A stream after open](Diagrams/Screen_Shot_2017-07-01_at_12.32.37_PM.png)
 
 Modules communicate by passing messages to neighboring models on a stream. A message consists of a linked list of message block headers; each block header points to the start and end location of the block's data. There are two types of messages - control and data - identified by a type indicator in the message header. Control message may result from *ioctl* system calls or from special conditions, such as a terminal hang-up, and data messages may result from *write* system calls or the arrival of data from a device.
 
 When a process *write*s a stream, the kernel copies the data from user space into message blocks allocated by the stream-head. The stream-head module invokes the put procedure of the next queue module, which may process the message, pass it immediately to the next queue, or enqueue it for later processing. In the latter case, the module links the message block headers on a linked list, forming a two-way linked list. The structure is shown in the figure:
 
-![Stream messages](Diagrams/Screen Shot 2017-07-01 at 12.53.57 PM.png)
+![Stream messages](Diagrams/Screen_Shot_2017-07-01_at_12.53.57_PM.png)
 
 Then it sets a flag in its queue data structure to indicate that it has data to process, and schedules itself for servicing. The module places the queue on a linked list of queues requesting service and invokes a scheduling mechanism; that scheduler calls the service procedures of each queue on the list.
 
 The process can "push" modules onto an opened stream by issuing *ioctl* system calls. The kernel inserts the pushed module immediately below the stream head and connects the queue pointers to keep the structure of the doubly linked list. Lower modules on the stream do not care whether they are communicating with the stream head or with a pushed module. Example of such structure:
 
-![Pushing module onto a stream](Diagrams/Screen Shot 2017-07-01 at 12.57.32 PM.png)
+![Pushing module onto a stream](Diagrams/Screen_Shot_2017-07-01_at_12.57.32_PM.png)
 
 An example of opening a terminal and pushing a line discipline:
 
@@ -378,7 +378,7 @@ where `PUSH` is the command name and `TTYLD` is a number that identifies the lin
 
 Streams are used in the implementation of *virtual terminals*. Each virtual terminal occupies the entire screen, and the user would type a control sequence to switch between virtual windows. The figure shows the structure of kernel modules:
 
-![Windowing virtual terminals on a physical terminal](Diagrams/Screen Shot 2017-07-01 at 1.18.30 PM.png)
+![Windowing virtual terminals on a physical terminal](Diagrams/Screen_Shot_2017-07-01_at_1.18.30_PM.png)
 
 The user invokes a process, *mpx*, to control the physical terminal. *mpx* *read*s the physical terminal line and waits for notification of control events, such as creation of a new window, switching control to another window, deletion of a window, and so on. When it receives notification that a user wants to create a new window, *mpx* creates a process to control the new window and communicates with it over a *pseudo-terminal* (*pty*). A *pty* is a software device that operates in pairs: Output directed to one member of the pair is sent to the input of the other member; input is sent to the upstream module. To set up a window *mpx* allocates a *pty* pair and *open*s one member, establishing a stream to it (the driver *open* insures that the *pty* was not previously allocated). *mpx* *fork*s, and the new process *open*s the other member of the *pty* pair. *mpx* pushes a message module onto its *pty* stream to convert control messages to data messages, and the child process pushes a line discipline module its *pty* stream before *exec*ing the shell. That shell is now running on a virtual terminal; to the user, it is indistinguishable from a physical terminal.
 

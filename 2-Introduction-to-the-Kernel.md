@@ -6,7 +6,7 @@ The UNIX system supports the illusions that the file system has "places" and tha
 
 The two entities, files and processes, are the two central concepts in the UNIX system model.
 
-![Block Diagram of the System Kernel](Diagrams/Screen Shot 2017-06-05 at 9.00.14 PM.png)
+![Block Diagram of the System Kernel](Diagrams/Scren_Shot_2017-06-05_at_9.00.14_PM.png)
 
 * The *file subsystem* is on the left and the *process control subsystem* is on the right.
 * The diagram shows 3 levels : user, kernel, and hardware.
@@ -20,7 +20,7 @@ Internal representation of a file is given by an *inode*, which contains a descr
 
 Inodes are stored in the file system, but the kernel reads them into an in-core (in-memory) inode table when manipulating files. The kernel contains two other data structures, the *file table* and the *user file descriptor table*. The file table is a global kernel structure, but the user file descriptor table is allocated per process. When a process *open*s or *creat*s a file, the kernel allocates an entry from each table, corresponding to the file's inode. Entries in the three structures -- user file descriptor table, file table, and inode table -- maintain the state of the file and the user's access to it.  The file table keeps track of the byte offset in the file where the user's next *read8 or *write* will start, and the access rights allowed to the *open*ing process. The user file descriptor table identifier all open files for a process.
 
-![File descriptors, file table, and inode table](Diagrams/Screen Shot 2017-06-05 at 9.25.33 PM.png)
+![File descriptors, file table, and inode table](Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png)
 
 The kernel returns a *file descriptor* for the *open* and *creat* system calls, which is an index into the user file descriptor table. These three tables also enable sharing of files.
 
@@ -30,7 +30,7 @@ A file system consists of a sequence of logical blocks, each containing 512, 102
 
 In this text, the size of a "block" is assumed to be 1K, unless stated otherwise.
 
-![File system layout](Diagrams/Screen Shot 2017-06-05 at 9.34.48 PM.png)
+![File system layout](Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png)
 
 A file system has the following structure:
 
@@ -69,12 +69,12 @@ The kernel loads an executable file into memory during an *exec* system call, an
 
 Because a process in the UNIX system can execute in two modes, kernel or user, it uses a separate stack for each mode. When a system call is made, a *trap* instruction is executed which causes an *interrupt* which makes the hardware switch to kernel mode. The kernel stack of a process is null when the process executes in user mode.
 
-![User and Kernel stack](Diagrams/Screen Shot 2017-06-05 at 10.08.31 PM.png)
+![User and Kernel stack](Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png)
 
 
 Every process has an entry in the kernel *process table*, and each process is allocated a *u area* ("u" stands for "user") that contains private data manipulated only by the kernel. The process table contains (or points to) a *per process region table*, whose entries point to entries in a *region table*. A region is a contiguous area of a process's address space, such as text, data, and stack. Region table entries describe the attributes of the region, such as whether it contains text or data, whether it is shared or private, and where the "data" of the region is located in memory. The extra level of indirection (from the per process region table to the region table) allows independent processes to share regions.
 
-![Data structures for processes](Diagrams/Screen Shot 2017-06-05 at 10.07.13 PM.png)
+![Data structures for processes](Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png)
 
 Important fields in the process table are:
 
@@ -123,7 +123,7 @@ Because a processor can execute only one process at a time, at most one process 
 
 Processes move continuously between the states according to well-defined rules. A *state transition* diagram is a directed graph.
 
-![Process States and Transitions](Diagrams/Screen Shot 2017-06-06 at 11.12.56 PM.png)
+![Process States and Transitions](Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png)
 
 By prohibiting arbitrary context switches and controlling the occurrence of interrupts, the kernel protects its consistency.
 
@@ -145,7 +145,7 @@ bp1->forp->backp = bp1;
 
 In the above code, we are trying to put a new node into a doubly linked list. Kernel uses many such doubly linked lists as its data structures. While inserting the node in the list, if a context switch occurs at the specified line, it will have incorrect links. If other process modifies the list, it will get corrupt.
 
-![Incorrect linked list because of context switch](Diagrams/Screen Shot 2017-06-06 at 11.21.21 PM.png)
+![Incorrect linked list because of context switch](Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png)
 
 Therefore, when entering *critical* regions of the code, kernel raises its processor execution level to prevent interrupts.
 
@@ -174,7 +174,7 @@ wakeup (event: the condition is false);
 
 Example of 3 processes waiting for a the same buffer.
 
-![Multiple processes sleeping on a lock](Diagrams/Screen Shot 2017-06-07 at 5.36.08 PM.png)
+![Multiple processes sleeping on a lock](Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png)
 
 
 ## Kernel Data Structures

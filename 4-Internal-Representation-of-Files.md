@@ -4,7 +4,7 @@ Every file a UNIX system has a unique inode. Processes interact with files using
 
 The algorithms described below are above the layer of buffer cache. Diagrammatically, it can be shown like this:
 
-![File system algorithms](Diagrams/Screen Shot 2017-06-08 at 9.29.01 PM.png)
+![File system algorithms](Diagrams/Screen_Shot_2017-06-08_at_9.29.01_PM.png)
 
 ## Inodes
 
@@ -22,7 +22,7 @@ Disk inodes consists of the following fields:
 
 The inode does not specify the pathname/pathnames that access the file.
 
-![Sample disk inode](Diagrams/Screen Shot 2017-06-08 at 9.46.10 PM.png)
+![Sample disk inode](Diagrams/Screen_Shot_2017-06-08_at_9.46.10_PM.png)
 
 The in-core inodes contain the following fields in additional to the fields of the disk inode:
 
@@ -127,7 +127,7 @@ In UNIX, the data in files is not stored sequentially on disk. If it was to be s
 
 To be able to have constant size and yet allow large files, indirect addressing is used. The inodes have array of size 13 which for storing the block numbers, although, the number of elements in array is independent of the storage strategy. The first 10 members of the array are "direct addresses", meaning that they store the block numbers of actual data. The 11th member is "single indirect", it stores the block number of the block which has "direct addresses". The 12th member is "double indirect", it stores block number of a "single indirect" block. And the 13th member is "triple indirect", it stores block number of a "double indirect" block. This strategy can be extended to "quadruple" or "quintuple" indirect addressing.
 
-![Direct and indirect blocks in Inode](Diagrams/Screen Shot 2017-06-09 at 4.07.02 PM.png)
+![Direct and indirect blocks in Inode](Diagrams/Screen_Shot_2017-06-09_at_4.07.02_PM.png)
 
 If a logical block on the file system holds 1K bytes and that a block number is addressable by a 32 bit integer, then a block can hold up to 256 block numbers. The maximum file size with 13 member data array is:
 
@@ -173,7 +173,7 @@ The algorithm *bmap* is used to convert logical byte offset of a file to a physi
 
 Some examples of conversions (refer to the figure):
 
-![Block layout of a sample file and its inode](Diagrams/Screen Shot 2017-06-09 at 5.54.58 PM.png)
+![Block layout of a sample file and its inode](Diagrams/Screen_Shot_2017-06-09_at_5.54.58_PM.png)
 
 1. To access byte offset 9000: 
 The first 10 blocks contain 10K bytes. So 9000 should be in the first 10 block.
@@ -185,7 +185,7 @@ The first 10 blocks contain 10K bytes `(350000 - 10240 = 339760)`. A single indi
 
 Directory files have entries of sub directories and files that reside inside them. Directory files have the mapping of a file name and its inode number. One directory entry takes 16 bytes. 14 bytes are given for the name of the file and 2 bytes for inode number. For example:
 
-![Example directory file](Diagrams/Screen Shot 2017-06-09 at 11.11.43 PM.png)
+![Example directory file](Diagrams/Screen_Shot_2017-06-09_at_11.11.43_PM.png)
 
 The entry `.` has the inode number of the the directory file itself. And `..` has the inode number of the parent directory. `.` and `..` for the root directory are nothing but inode numbers of the root directory itself. Entries that have the inode number 0 are empty (i.e. deleted files).
 
@@ -302,7 +302,7 @@ If the super block list of free inodes is empty, the kernel searches the disk an
 
 An example:
 
-![Free inodes example](Diagrams/Screen Shot 2017-06-10 at 1.13.35 PM.png)
+![Free inodes example](Diagrams/Screen_Shot_2017-06-10_at_1.13.35_PM.png)
 
 Super block lists are maintained such that the last inode it dispenses from the list is the remembered inode.
 
@@ -335,7 +335,7 @@ Ideally, there should never be free inodes whose inode number is less than the r
 
 An example:
 
-![Freeing inodes example](Diagrams/Screen Shot 2017-06-10 at 1.27.31 PM.png)
+![Freeing inodes example](Diagrams/Screen_Shot_2017-06-10_at_1.27.31_PM.png)
 
 In *ialloc*, there is a race condition where an inode can be in use even if we get it from the list of free inode numbers in the super block. Following is an example where such condition is possible.
 
@@ -345,7 +345,7 @@ Assume that there are 3 processes, A, B, and C. If process A assigns inode I but
 
 When data is written on a file, the kernel must allocate disk blocks from the file system (for direct data blocks or sometimes, indirect data blocks). The file system super block contains an array that is used to cache the numbers of free disk blocks in the file system. The utility program *mkfs* (make file system) organizes the data blocks of a file system in a linked list, such that each link of the list is a disk block that contains an array of free disk block numbers, and one array entry is the number of the next block of the linked list. For example:
 
-![Linked list of free disk block numbers](Diagrams/Screen Shot 2017-06-10 at 2.09.51 PM.png)
+![Linked list of free disk block numbers](Diagrams/Screen_Shot_2017-06-10_at_2.09.51_PM.png)
 
 Algorithm for allocation of disk blocks (*alloc*) is given below:
 
@@ -381,7 +381,7 @@ The program *mkfs* tries to organize the original linked list of free block numb
 The algorithm *free* for freeing a block is the reverse of the one for allocating a block. If the super block list is not full, the block number of the newly freed block is placed on the super block list. If, however, the super block list is full, the newly freed block becomes a link block; the kernel writes the super block list into the block and writes the block to disk. It then places the block number of the newly freed block in the super block list: That block number is the only member of the list.
 
 An example of how the super block free data blocks list works:
-![Requesting and freeing disk blocks](Diagrams/Screen Shot 2017-06-10 at 2.24.36 PM.png)
+![Requesting and freeing disk blocks](Diagrams/Screen_Shot_2017-06-10_at_2.24.36_PM.png)
 
 There is a difference is how free inode numbers are managed and how free disk block numbers are managed. All the free disk block numbers are stored as a linked list of arrays but in case of free inode numbers, all the free inode numbers are not stored. After the capacity of the free inode numbers exceeds, the other free inode numbers are not stored anywhere. There are 3 reasons for this different treatment:
 

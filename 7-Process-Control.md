@@ -2,7 +2,7 @@
 
 The relationship between the system calls and memory management algorithms is shown in the following diagram:
 
-![Process system calls and relation to other algorithms](Diagrams/Screen Shot 2017-06-19 at 5.07.38 PM.png)
+![Process system calls and relation to other algorithms](Diagrams/Screen_Shot_2017-06-19_at_5.07.38_PM.png)
 
 Almost all calls use *sleep* and *wakeup* so its not shown in the figure. *exec* also interacts with the file system algorithms.
 
@@ -73,7 +73,7 @@ When the child context is ready, the parent completes its part of *fork* by chan
 
 The figure give a logical view of the parent and child processes and their relationship with the kernel data structures immediately after completion of the *fork* system call:
 
-![Fork creating a new process context](Diagrams/Screen Shot 2017-06-19 at 10.52.07 PM.png)
+![Fork creating a new process context](Diagrams/Screen_Shot_2017-06-19_at_10.52.07_PM.png)
 
 Consider a program where a process has some global variables and has opened some files. After opening the files, the process *fork*s a child process. In this scenario, as the data region was copied, both the processes have their own copies of the global variables, and changing a variable in one process' context will not affect the variable in other process' context. But as the user file descriptor entries of the two processes point to the same file table entry, if one process *read*s/*write*s a file, the offset in the file table will change and the other process will get affected, because when it tries to *read*/*write*, it will do it with respect to the changed offset.
 
@@ -150,7 +150,7 @@ When a kernel or a process sends a signal to another process, a bit in the proce
 
 The kernel checks for receipt of a signal when a process about to return from kernel mode to user mode and when it enters or leaves the sleep state at a suitably low scheduling priority. The kernel handles signals only when a process returns from kernel mode to user mode. This is shown in the following figure:
 
-![Checking and handling signals in the process state diagram](Diagrams/Screen Shot 2017-06-20 at 8.19.22 PM.png)
+![Checking and handling signals in the process state diagram](Diagrams/Screen_Shot_2017-06-20_at_8.19.22_PM.png)
 
 If a process is running in user mode, and the kernel handles an interrupt that causes a signal to be sent to the process, the kernel will recognize and handle the signal when it returns from the interrupt. Thus, a process never executes in user mode before handling outstanding signals.
 
@@ -236,11 +236,11 @@ If a process receives a signal that it had previously decided to catch, it execu
 
 Consider the following program which catches interrupt signals (SIGINT) and sends itself an interrupt signal. Consider the disassembly (only relevant parts) of the load module on a VAX 11/780.
 
-![Source code and disassembly of the program that catches signal](Diagrams/Screen Shot 2017-06-20 at 9.06.33 PM.png)
+![Source code and disassembly of the program that catches signal](Diagrams/Screen_Shot_2017-06-20_at_9.06.33_PM.png)
 
 The call to the *kill* library routine comes from address f9, and the library routine executes the *chmk* (change mode to kernel) instruction at address 10a to call the *kill* system call, the kernel sends an interrupt signal to the process. The return address from the system call is 10c. in executing the system call, the kernel sends an interrupt signal to the process. The kernel notices the interrupt signal when it is about to return to user mode, removes the address 10c from the user saved register context, and places it on the user stack. The kernel takes the address of the function *catcher*, 104, and puts it into the user saved register context. The following figure shows the states of the user stack and saved register context:
 
-![User stack and kernel save area before and after receipt of signal](Diagrams/Screen Shot 2017-06-20 at 9.14.08 PM.png)
+![User stack and kernel save area before and after receipt of signal](Diagrams/Screen_Shot_2017-06-20_at_9.14.08_PM.png)
 
 There are some anomalies in the way signals are handled. The kernel clears the virtual address of the catcher function before it returns to the user mode. If the process wanted to handle the signal again, it must call the *signal* system call again. But here a race condition results because a second instance of the signal may arrive before the process has a chance to invoke the system call. Since the process is executing in user mode, the kernel could do a context switch, increasing the change that the process will receive the signal before resetting the signal catcher. But if the address of the signal catcher was not reset and many signals had arrived before the kernel gets a chance to handle them, the user stack would grow infinitely, resulting into a system crash. This is more severe than the previously seen case. BSD solved this problem by blocking signals of same type when a signal is being handled. When it unblocks the signals, the pending signals are sent.
 
@@ -772,7 +772,7 @@ The algorithm for *init* is given below:
 
 *init* reads the file "/etc/inittab" for instructions about which processes to spawn. The file "/etc/inittab" contains lines that contain an "id", a state identifier (single user, multi-user, etc), an "action" and a program specification. This is shown below:
 
-![Sample inittab file](Diagrams/Screen Shot 2017-06-22 at 11.15.32 PM.png)
+![Sample inittab file](Diagrams/Screen_Shot_2017-06-22_at_11.15.32_PM.png)
 
 *init* reads the file and, if the *state* in which it was invoked matches the state identifier of a line, creates a process that executes the given program specification. Meanwhile, *init* executes the *wait* system call, monitoring the death of its child processes and the death of processes "orphaned" by *exit*ing parents.
 
