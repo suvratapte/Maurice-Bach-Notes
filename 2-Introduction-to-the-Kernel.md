@@ -6,7 +6,7 @@ The UNIX system supports the illusions that the file system has "places" and tha
 
 The two entities, files and processes, are the two central concepts in the UNIX system model.
 
-![Block Diagram of the System Kernel](Diagrams/Scren_Shot_2017-06-05_at_9.00.14_PM.png)
+![Block Diagram of the System Kernel](Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png)
 
 * The *file subsystem* is on the left and the *process control subsystem* is on the right.
 * The diagram shows 3 levels : user, kernel, and hardware.
