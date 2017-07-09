@@ -14,7 +14,7 @@ The two entities, files and processes, are the two central concepts in the UNIX 
 
 ## Introduction to System Concepts
 
-###An Overview of the File Subsystem
+### An Overview of the File Subsystem
 
 Internal representation of a file is given by an *inode*, which contains a description of the disk layout of the file data and other information such as the file owner, access permissions, and access times. The term inode is a contraction of the term *index node*. Every file has one inode, but it may have several names, all of which map into the inode. Each name is called a *link*. When a process creates a new file, the kernel assigns it an unused inode.
 
@@ -39,7 +39,7 @@ A file system has the following structure:
 * The *inode list* is a list of inodes that follows the super block in the file system. Administrators specify the size of the inode list when configuring a file system. The kernel references inodes by index into the inode list. One inode is the *root inode* of the file system: it is the inode by which the directory structure of the file system is accessible after execution of the *mount* system call.
 * The data blocks start at the end of the inode list and contain file data and administrative data. An allocated data block can belong to t one and only one file in the file system.
 
-##Processes
+## Processes
 
 A process is the execution of a program and consists of a pattern of bytes that the CPU interprets as machine instructions (called *text*), *data*, and *stack*. Processes communicate with other processes and with the rest of the world via system calls.
 
@@ -93,7 +93,7 @@ The u area contains information that needs to be accessible only when the proces
 
 The kernel internally uses a structure variable *u* which points to the u area of the currently executing process. When another process executes, the kernel rearranges its virtual address space that *u* refers to the u area of the new process.
 
-##Context of a process
+## Context of a process
 
 Context of a process consists of the following:
 
@@ -110,7 +110,7 @@ When the kernel decides that it should execute another process, it does a *conte
 
 The kernel services the interrupts in the context of the interrupted process even though it may not have caused the interrupt. Interrupts are served in kernel mode.
 
-##Process states
+## Process states
 
 1. Process is currently executing in user mode.
 2. Process is currently executing in kernel mode.
@@ -119,7 +119,7 @@ The kernel services the interrupts in the context of the interrupted process eve
 
 Because a processor can execute only one process at a time, at most one process may be in states 1 and 2.
 
-##State transitions
+## State transitions
 
 Processes move continuously between the states according to well-defined rules. A *state transition* diagram is a directed graph.
 
@@ -151,7 +151,7 @@ Therefore, when entering *critical* regions of the code, kernel raises its proce
 
 The process scheduler periodically preempts processes executing in user mode so that processes cannot monopolize use of the CPU.
 
-##Sleep and wakeup
+## Sleep and wakeup
 
 A process changes its state on its own will. Other processes can communicate with it and suggest various alternatives. But the final decision is made by the process on its own initiative. Consequently, an interrupt handler cannot go to sleep, because if it could, the interrupted process would be put to sleep by default.
 
