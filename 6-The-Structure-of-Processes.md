@@ -309,7 +309,7 @@ The algorithm *allocreg* is given below:
 
 ```
 /*  Algorithm: allocreg
- *  Input: indoe pointer
+ *  Input: inode pointer
  *         region type
  *  Output: locked region
  */
