@@ -2,7 +2,7 @@
 
 ## Why UNIX became so popular
 
-* The system is written in a high-level language, making it easy to read, understand, change, and move to tother machines.
+* The system is written in a high-level language, making it easy to read, understand, change, and move to other machines.
 * It has a simple user interface that has the power to provide the services that users want.
 * It provides primitives that permit complex programs to be built from simpler programs.
 * It uses a hierarchical file system that allows easy maintenance and efficient implementation.
