@@ -24,14 +24,14 @@ The status of a buffer is a combination of the following conditions:
 * Buffer is locked / busy
 * Buffer contains valid data
 * Kernel must write the buffer contents to disk before reassigning the buffer; called as "delayed-write"
-* Kernel is currently reading or writing the contexts of the buffer to disk
+* Kernel is currently reading or writing the contents of the buffer to disk
 * A process is currently waiting for the buffer to become free.
 
 The two set of pointers in the header are used for traversal of the buffer queues (doubly linked circular lists).
 
 ## Structure of the Buffer Pool
 
-The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence the buffers closer and closer to the head of the list are the most recently used ones.
+The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence, the buffers that are closer to the head of the free list have not been used as recently as those that are further from the head of the free list. 
 
 ![Free list of buffers](Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png)
 
