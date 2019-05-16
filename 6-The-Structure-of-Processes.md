@@ -160,7 +160,7 @@ The system is responsible for handling interrupts and exceptions. If the system 
 1. It saves the current register context of the executing process and creates (pushes) a new context layer.
 2. The kernel determines the source (cause) of the interrupt, and if applicable, unit number (such as which drive caused the interrupt). When the system receives an interrupt, it gets a number. It uses that number as an index into the *interrupt vector*, which stores the actions to be taken (interrupt handlers) when interrupts occur. Example of *interrupt vector*:
 
-![Interrupt vector](Diagrams/Screen_Shot_2017-06-17_at_12.51.32_PM.png)
+![Interrupt vector](Diagrams/Screen_Shot_2019-04-14_at_06.00.00_PM.png)
 
 3. The kernel invokes the interrupt handler. The kernel stack of the new context layer is logically distinct from the kernel stack of the previous context layer. Some implementations use the processes kernel stack to store the stack frame of an interrupt handler, while some implementations use a global interrupt stack for the interrupt handlers which are guaranteed to return without a context switch.
 4. The kernel returns from the interrupt handler and executes a set of hardware instructions which restore the previous context. The interrupt handler may affect the behavior of the process as it might modify the kernel data structures. But usually, the process resumes execution as if the interrupt never occurred.
@@ -309,7 +309,7 @@ The algorithm *allocreg* is given below:
 
 ```
 /*  Algorithm: allocreg
- *  Input: indoe pointer
+ *  Input: inode pointer
  *         region type
  *  Output: locked region
  */
