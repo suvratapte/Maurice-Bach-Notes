@@ -43,7 +43,7 @@ The hash function shown in the figure only depends on the block number; real has
 
 Every disk block in the buffer pool exists on one and only one hash queue and only once on that queue. However, presence of a buffer on a hash queue does not mean that it is busy, it could well be on the free list as well if its status is free.
 
-Therefore, if the kernel wants a particular buffer, it will search it on the has queue. But if it wants *any* buffer, it removes a buffer from the free list. **A buffer is always on a hash queue, but it may or may not be on the free list**
+Therefore, if the kernel wants a particular buffer, it will search it on the queue. But if it wants *any* buffer, it removes a buffer from the free list. **A buffer is always on a hash queue, but it may or may not be on the free list**
 
 ## Scenarios for Retrieval of a Buffer
 
