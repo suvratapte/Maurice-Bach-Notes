@@ -145,7 +145,7 @@ main()
 	struct tms pb1, pb2;
 	long pt1, pt2;
 	
-	pt1 = times(&ab1);
+	pt1 = times(&pb1);
 	for (i = 0; i < 10; i++)
 		if (fork() == 0)
 			child(i);
