@@ -1,4 +1,4 @@
-# The Buffer Cache
+# Chapter 3: The Buffer Cache
 
 The kernel could read and write directly to and from the disk for all the file system accesses, but system response time and throughput will be poor because of the slow disk transfer rate. The kernel therefore attempts to minimize the frequency of disk access by keeping a pool of data buffers, called the *buffer cache*, which contains data in recently used disk blocks.
 

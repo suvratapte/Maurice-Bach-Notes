@@ -1,4 +1,4 @@
-# Multiprocessor Systems
+# Chapter 12: Multiprocessor Systems
 
 A multiprocessor architecture contains two or more CPUs that share common memory and peripherals (as shown in the diagram). Processes can run concurrently run on different processors. But each CPU execute the same copy of the kernel. Processes can migrate between processors transparently. But the design of the UNIX system has to be changed to support multiprocessor systems.
 

@@ -1,4 +1,4 @@
-# Interprocess Communication
+# Chapter 11: Interprocess Communication
 
 Processes have to communicate to exchange data and to synchronize operations. Several forms of interprocess communication are: pipes, named pipes and signals. But each one has some limitations.
 

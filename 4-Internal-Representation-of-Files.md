@@ -1,4 +1,4 @@
-# Internal Representation of Files
+# Chapter 4: Internal Representation of Files
 
 Every file a UNIX system has a unique inode. Processes interact with files using well defined system calls. The users specify a file with a character string which is the file's path and then the system get the inode which is mapped to the file which corresponds to the path.
 

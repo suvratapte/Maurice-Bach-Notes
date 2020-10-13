@@ -1,4 +1,4 @@
-# The Structure of Processes
+# Chapter 6: The Structure of Processes
 
 The kernel has a process table where it stores the state of the process and other information about the process. The information of the entry and the u-area of the process combined is the *context* of the process.
 

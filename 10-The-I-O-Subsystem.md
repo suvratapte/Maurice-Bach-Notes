@@ -1,4 +1,4 @@
-# The I/O Subsystem
+# Chapter 10: The I/O Subsystem
 
 The I/O subsystem allows a process to communicate with peripheral devices such as disks, tape drives, terminals, printers, and networks, and the kernel modules that control devices are known as *device drivers*. Usually, there is a one-to-one correspondence between device drivers and device types: Systems may contain one disk driver to control all disk drives, one terminal driver to control all terminals, and so on. Same type of devices from different manufacturers may have different device drivers. The system supports "software devices", which have no associated physical device. For example, it treats physical memory as a device to allow a process access to physical memory outside its address space, even though memory is not a peripheral device. The kernel profiler described previously is implemented as a driver.
 

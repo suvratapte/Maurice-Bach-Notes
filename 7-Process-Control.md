@@ -1,4 +1,4 @@
-# Process Control
+# Chapter 7: Process Control
 
 The relationship between the system calls and memory management algorithms is shown in the following diagram:
 

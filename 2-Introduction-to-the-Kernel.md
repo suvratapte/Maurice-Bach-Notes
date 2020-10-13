@@ -1,4 +1,4 @@
-# Introduction to the Kernel
+# Chapter 2: Introduction to the Kernel
 
 ## Architecture of the UNIX Operating System
 
