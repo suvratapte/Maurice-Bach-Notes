@@ -18,4 +18,8 @@ These are my notes on the classic operating systems book: **The Design of the UN
 12. [**Multiprocessor Systems**](12-Multiprocessor-Systems.md)
 13. [**Distributed UNIX Systems**](13-Distributed-UNIX-Systems.md)
 
-If you feel that corrections are required, please let me know! :)
+
+
+I read this book in a course taught by **Dr. Vijay Gokhale**.
+
+If you feel that corrections are required, feel free to create a PR! :)
