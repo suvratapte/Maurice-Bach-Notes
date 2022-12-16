@@ -20,7 +20,7 @@ The steps followed by the kernel for *fork* are:
 2. It assigns a unique ID to the newly created process.
 3. It makes a logical copy of the regions of the parent process. If a regions can be shared, only its reference count is incremented instead of making a physical copy of the region.
 4. The reference counts of file table entries and inodes of the process are increased.
-5. It turned the child process ID to the parent and 0 to the child.
+5. It returns the child process ID to the parent and 0 to the child.
 
 The algorithm for *fork* varies slightly for demand paging systems and swapping systems. The algorithms given below are for the traditional swapping system, but wherever changes are required for a paging system, it is mentioned so.
 
