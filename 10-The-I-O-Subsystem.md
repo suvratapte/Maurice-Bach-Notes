@@ -159,7 +159,7 @@ The disk driver translates a file system address, consisting of a logical device
 
 Because of high disk traffic, the disk driver must maximize the data throughput to get the best system performance. Most modern disk controllers take care of disk job scheduling, positioning the disk arm, and transferring data between the disk and the CPU; otherwise, the disk driver must do these tasks.
 
-Two important programs that deal directly with the disk (bypassing the file system) are *mkfs* and *fsck*.
+Two important programs that deal directly with the disk (bypassing the file system) are *mkfs* and *fsck*. *mkfs* formats a disk section for a UNIX file system, creating a super block, inode list, linked list of free disk blocks, and a root directory on the new file system. *fsck* checks the consistency of an existing file system and corrects errors
 
 ## Terminal Drivers
 
