@@ -251,7 +251,7 @@ The kernel periodically writes the superblock to the disk if it had been modifie
 
 ## Inode Assignment to a New File
 
-Algorithm *ialloc* is used to assign an inode to a newly crated file:
+Algorithm *ialloc* is used to assign an inode to a newly created file:
 
 ```
 /*  Algorithm: ialloc
