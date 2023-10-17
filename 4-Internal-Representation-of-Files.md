@@ -267,7 +267,7 @@ Algorithm *ialloc* is used to assign an inode to a newly created file:
 			sleep (event: super block becomes free);
 			continue;
 		}
-		if (indoe list in super block is empty)
+		if (inode list in super block is empty)
 		{
 			lock super block;
 			get remembered inode for free inode search;
