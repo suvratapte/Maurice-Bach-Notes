@@ -602,7 +602,7 @@ If a process that is woken up is not loaded in the memory, the kernel wakes up t
 
 *wakeup* does **not** cause the process to be scheduled immediately; it only makes the process eligible to get scheduled.
 
-Processes usually sleep on events that are guaranteed to occur. Such as, I/O of a buffer or an inode/buffer to get unlocked. But processes also might sleep on events that are not guaranteed to happen. In such cases, there must be a mechanism through which processes can wakeup and regain control. The kernel can send a *signal* to such processes (signals are studies later) and wake them up. A signal can be sent *selectively* to a process, and as a result, it wakes up and it can recognize that a signal has been received.
+Processes usually sleep on events that are guaranteed to occur. Such as, I/O of a buffer or an inode/buffer to get unlocked. But processes also might sleep on events that are not guaranteed to happen. In such cases, there must be a mechanism through which processes can wakeup and regain control. The kernel can send a *signal* to such processes (signals are studied later) and wake them up. A signal can be sent *selectively* to a process, and as a result, it wakes up and it can recognize that a signal has been received.
 
 If the sleep priority is above a threshold value, a process will not wake up on receiving a signal, but will sleep until the event occurs. But if the priority is below a threshold value, it will wakeup immediately on receipt of a signal.
 
